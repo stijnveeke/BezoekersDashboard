@@ -114,9 +114,10 @@ body {
   display: grid;
   grid-template-columns: 180px auto;
   grid-template-rows: auto 60px;
-  height: 100%;
-  position: fixed;
+  margin-bottom: 0;
+  position: absolute;
   width: 100%;
+  height: 100%;
 }
 
 #dash_body header {
@@ -160,4 +161,87 @@ body {
 
 .title_link:hover {
     text-decoration: none;
+}
+
+.chart_holder {
+    width: 100%;
+    display: inline-block;
+    min-width: 300px;
+    min-height: 150px;
+    grid-row-start: 2;
+    margin: auto;
+    margin-bottom: 0;
+}
+
+.custom_map {
+    display: inline-block;
+    grid-row-start: 1;
+    grid-row-end: 3;
+    grid-column: 3;
+    margin: auto;
+    margin-right: 0;
+    margin-bottom: 0;
+}
+
+.custom_table {
+    grid-column-start: 1;
+    grid-column-end: 4;
+}
+
+.data_holder {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    grid-template-rows: auto auto auto;
+}
+
+.nav_btn.nav_active {
+   background-color: lawngreen;
+}
+
+.nav_toggle_btn.nav_active {
+    background-color: yellow;
+}
+
+.nav_input.nav_active {
+    visibility: visible;
+    position: inherit;
+}
+
+.nav_input {
+    visibility: hidden;
+    position: absolute;
+}
+
+#input_zip { 
+    visibility: hidden;
+    position: absolute;
+}
+
+#input_zip.nav_active {
+    visibility: visible;
+    position: inherit;
+}
+
+#filter_input_holder {
+    display: inline-block;
+}
+
+#filter_nav_holder {
+    display: inline-block;
+}
+
+#submit_filter {
+    display: inline-block;
+}
+
+#filter_submit_holder {
+    display: inline-block;
+}
+
+#filter_holder {
+    display: grid;
+    grid-template-columns: auto auto 61px;
+    grid-column-start: 1;
+    grid-column-end: 3;
+
 }

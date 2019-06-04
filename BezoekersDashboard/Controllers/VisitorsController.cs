@@ -21,7 +21,7 @@ namespace BezoekersDashboard.Controllers
         // GET: Visitors
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Visitors.ToListAsync());
+            return View(await _context.Visitors.OrderByDescending(s => s.Date.Year).ToListAsync());
         }
 
         // GET: Visitors/Details/5
@@ -80,8 +80,34 @@ namespace BezoekersDashboard.Controllers
             return View(visitors);
         }
 
+        [Route("Visitors/input_zip/{zipcode}")]
+        public async Task<IActionResult> GetZip(string zipcode)
+        {
+
+            if (zipcode == "" || zipcode == null)
+            {
+                ViewData["date"] = "test";
+                return NotFound();
+            }
+            ViewData["date"] = zipcode;
+            var visit = await _context.Visitors.ToListAsync();
+            List<Visitors> realvisit = new List<Visitors>();
+            foreach (var item in visit)
+            {
+                if (item.Zipcode == zipcode)
+                {
+                    realvisit.Add(await _context.Visitors.FindAsync(item.Id));
+                }
+            }
+            if (realvisit == null)
+            {
+                return NotFound();
+            }
+            return View("Visitors", realvisit.OrderBy(s => s.Date.Year));
+        }
+
         // GET : Visitors/Date/24-12-2018
-        [Route("Visitors/GetDate/{date}")]
+        [Route("Visitors/input_date/{date}")]
         public async Task<IActionResult> GetDate(string date)
         {
 
@@ -90,13 +116,12 @@ namespace BezoekersDashboard.Controllers
                 ViewData["date"] = "test";
                 return NotFound();
             }
-
             ViewData["date"] = date;
             var visit = await _context.Visitors.ToListAsync();
             List<Visitors> realvisit = new List<Visitors>();
             foreach (var item in visit)
             {
-                var itemdate = item.Date.ToString("d-M-yyyy");
+                var itemdate = item.Date.ToString("yyyy-MM-d");
                 if (itemdate == date)
                 {
                     realvisit.Add(await _context.Visitors.FindAsync(item.Id));
@@ -106,7 +131,159 @@ namespace BezoekersDashboard.Controllers
             {
                 return NotFound();
             }
-            return View("Visitors", realvisit);
+            return View("Visitors", realvisit.OrderBy(s => s.Date.Year));
+        }
+
+        [Route("Visitors/input_month/{month}")]
+        public async Task<IActionResult> GetMonth(string month)
+        {
+
+            if (month == "" || month == null)
+            {
+                ViewData["month"] = "test";
+                return NotFound();
+            }
+            if (month.Length == 1)
+            {
+                month = "0" + month;
+            }
+            ViewData["month"] = month;
+            var visit = await _context.Visitors.ToListAsync();
+            List<Visitors> realvisit = new List<Visitors>();
+            foreach (var item in visit)
+            {
+                var itemmonth = item.Date.ToString("MM");
+                if (itemmonth == month)
+                {
+                    realvisit.Add(await _context.Visitors.FindAsync(item.Id));
+                }
+            }
+            if (realvisit == null)
+            {
+                return NotFound();
+            }
+            return View("Visitors", realvisit.OrderBy(s => s.Date.Year));
+        }
+
+        [Route("Visitors/input_year/{year}")]
+        public async Task<IActionResult> GetYear(string year)
+        {
+
+            if (year == "" || year == null)
+            {
+                ViewData["year"] = "test";
+                return NotFound();
+            }
+            ViewData["month"] = year;
+            var visit = await _context.Visitors.ToListAsync();
+            List<Visitors> realvisit = new List<Visitors>();
+            foreach (var item in visit)
+            {
+                var itemyear = item.Date.ToString("yyyy");
+                if (itemyear == year)
+                {
+                    realvisit.Add(await _context.Visitors.FindAsync(item.Id));
+                }
+            }
+            if (realvisit == null)
+            {
+                return NotFound();
+            }
+            return View("Visitors", realvisit.OrderBy(s => s.Date.Year));
+        }
+
+        [Route("Visitors/input_date/{date}/input_zip/{zipcode}")]
+        public async Task<IActionResult> GetDateZip(string date, string zipcode)
+        {
+
+            if (date == "" || date == null || zipcode == "" || zipcode == null)
+            {
+                ViewData["date"] = "test";
+                return NotFound();
+            }
+            ViewData["date"] = date;
+            var visit = await _context.Visitors.ToListAsync();
+            List<Visitors> realvisit = new List<Visitors>();
+            foreach (var item in visit)
+            {
+                var itemdate = item.Date.ToString("yyyy-MM-d");
+                if (itemdate == date)
+                {
+                    if (item.Zipcode == zipcode)
+                    {
+                        realvisit.Add(await _context.Visitors.FindAsync(item.Id));
+                    }
+                }
+            }
+            if (realvisit == null)
+            {
+                return NotFound();
+            }
+            return View("Visitors", realvisit.OrderBy(s => s.Date.Year));
+        }
+
+        [Route("Visitors/input_month/{month}/input_zip/{zipcode}")]
+        public async Task<IActionResult> GetMonthZip(string month, string zipcode)
+        {
+
+            if (month == "" || month == null || zipcode == "" || zipcode == null)
+            {
+                ViewData["month"] = "test";
+                return NotFound();
+            }
+            if (month.Length == 1)
+            {
+                month = "0" + month;
+            }
+            ViewData["month"] = month;
+            var visit = await _context.Visitors.ToListAsync();
+            List<Visitors> realvisit = new List<Visitors>();
+            foreach (var item in visit)
+            {
+                var itemmonth = item.Date.ToString("MM");
+                if (itemmonth == month)
+                {
+                    if (item.Zipcode == zipcode)
+                    {
+                        realvisit.Add(await _context.Visitors.FindAsync(item.Id));
+                    }
+                }
+            }
+            if (realvisit == null)
+            {
+                return NotFound();
+            }
+            return View("Visitors", realvisit.OrderBy(s => s.Date.Year));
+        }
+
+        [Route("Visitors/input_year/{year}/input_zip/{zipcode}")]
+        public async Task<IActionResult> GetYearZip(string year, string zipcode)
+        {
+
+            if (year == "" || year == null || zipcode == "" || zipcode == null)
+            {
+                ViewData["year"] = "test";
+                return NotFound();
+            }
+            ViewData["month"] = year;
+            var visit = await _context.Visitors.ToListAsync();
+            List<Visitors> realvisit = new List<Visitors>();
+            foreach (var item in visit)
+            {
+                var itemyear = item.Date.ToString("yyyy");
+                if (itemyear == year)
+                {
+                    if (item.Zipcode == zipcode)
+                    {
+                        realvisit.Add(await _context.Visitors.FindAsync(item.Id));
+                    }
+                }
+            }
+            if (realvisit == null)
+            {
+                return NotFound();
+            }
+            return View("Visitors", realvisit.OrderBy(s => s.Date.Year));
         }
 
         // POST: Visitors/Edit/5
