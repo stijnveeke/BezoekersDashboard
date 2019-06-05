@@ -121,7 +121,7 @@ namespace BezoekersDashboard.Controllers
             List<Visitors> realvisit = new List<Visitors>();
             foreach (var item in visit)
             {
-                var itemdate = item.Date.ToString("yyyy-MM-d");
+                var itemdate = item.Date.ToString("yyyy-MM-dd");
                 if (itemdate == date)
                 {
                     realvisit.Add(await _context.Visitors.FindAsync(item.Id));
@@ -206,7 +206,7 @@ namespace BezoekersDashboard.Controllers
             List<Visitors> realvisit = new List<Visitors>();
             foreach (var item in visit)
             {
-                var itemdate = item.Date.ToString("yyyy-MM-d");
+                var itemdate = item.Date.ToString("yyyy-MM-dd");
                 if (itemdate == date)
                 {
                     if (item.Zipcode == zipcode)
