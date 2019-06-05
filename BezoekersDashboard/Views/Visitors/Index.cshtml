@@ -47,24 +47,31 @@
                     <th>
                         @Html.DisplayNameFor(model => model.Zipcode)
                     </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Date)
-                    </th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model)
+                @{ 
+                    var table_value_ar = new Dictionary<string, int>();
+                    foreach (var item in Model)
+                    {
+                        if (!(table_value_ar.ContainsKey(item.Zipcode)))
+                        {
+                            table_value_ar.Add(item.Zipcode, item.Amount);
+                        }else
+                        {
+                            table_value_ar[item.Zipcode] += item.Amount;
+                        }
+                    }
+                } 
+                @foreach (var table_value in table_value_ar)
                 {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Amount)
+                        @table_value.Value
                     </td>
                     <td>
-                        <a href="Visitors/GetZip/@Html.DisplayFor(modelItem => item.Zipcode)">@Html.DisplayFor(modelItem => item.Zipcode)</a>
+                        <a href="Visitors/GetZip/@table_value.Key">@table_value.Key</a>
                     </td>
-                    <td>
-                        <a href="Visitors/GetDate/@Html.DisplayFor(modelItem => item.Date)">@Html.DisplayFor(modelItem => item.Date)</a>
-                    </td> 
                 </tr>
                 }
             </tbody>
