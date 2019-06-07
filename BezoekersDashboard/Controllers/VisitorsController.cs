@@ -64,6 +64,78 @@ namespace BezoekersDashboard.Controllers
             return View(visitors);
         }
 
+        [Route("Visitors/auto/generate-records")]
+        public async Task<IActionResult> FillTables()
+        {
+            List<int> year_list = new List<int>();
+            year_list.Add(2018);
+            year_list.Add(2019);
+            List<int> month_list = new List<int>();
+            month_list.Add(1);
+            month_list.Add(2);
+            month_list.Add(3);
+            month_list.Add(4);
+            month_list.Add(5);
+            month_list.Add(6);
+            month_list.Add(7);
+            month_list.Add(8);
+            month_list.Add(9);
+            month_list.Add(10);
+            month_list.Add(11);
+            month_list.Add(12);
+            List<string> time_list = new List<string>();
+            time_list.Add("1:00");
+            time_list.Add("2:00");
+            time_list.Add("3:00");
+            time_list.Add("4:00");
+            time_list.Add("5:00");
+            time_list.Add("6:00");
+            time_list.Add("7:00");
+            time_list.Add("8:00");
+            time_list.Add("9:00");
+            time_list.Add("10:00");
+            time_list.Add("11:00");
+            time_list.Add("12:00");
+            time_list.Add("13:00");
+            time_list.Add("14:00");
+            time_list.Add("15:00");
+            time_list.Add("16:00");
+            time_list.Add("17:00");
+            time_list.Add("18:00");
+            time_list.Add("19:00");
+            time_list.Add("20:00");
+            time_list.Add("21:00");
+            time_list.Add("22:00");
+            time_list.Add("23:00");
+            time_list.Add("00:00");
+            if (ModelState.IsValid)
+            {
+                Visitors newvisit = new Visitors();
+                Random rand = new Random();
+                foreach (int year in year_list)
+                {
+                    foreach (int month in month_list)
+                    {
+                        int daysinmonth = DateTime.DaysInMonth(year, month);
+                        for (int day = 1; day < daysinmonth; day++)
+                        {
+                            foreach(string time in time_list)
+                            {
+                                newvisit.Amount = rand.Next(10, 50);
+                                string datetimestring = year.ToString() + "-" + month.ToString() + "-" + day.ToString() + " " + time;
+                                newvisit.Date = DateTime.Parse(datetimestring);
+                                newvisit.Zipcode = "4724CW";
+                                newvisit.Id = 0;
+                                _context.Add(newvisit);
+                                await _context.SaveChangesAsync();
+                                newvisit = new Visitors();
+                            }
+                        }
+                    }
+                }
+            }
+            return View("Visitors");
+        }
         // GET: Visitors/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -83,7 +155,7 @@ namespace BezoekersDashboard.Controllers
         [Route("Visitors/input_zip/{zipcode}")]
         public async Task<IActionResult> GetZip(string zipcode)
         {
-
+            ViewData["input_zipcode"] = zipcode;
             if (zipcode == "" || zipcode == null)
             {
                 ViewData["date"] = "test";
@@ -103,7 +175,7 @@ namespace BezoekersDashboard.Controllers
             {
                 return NotFound();
             }
-            return View("Visitors", realvisit.OrderBy(s => s.Date.Year));
+            return View("VisitZipFilter", realvisit.OrderBy(s => s.Date.Year));
         }
 
         // GET : Visitors/Date/24-12-2018
@@ -111,6 +183,7 @@ namespace BezoekersDashboard.Controllers
         public async Task<IActionResult> GetDate(string date)
         {
 
+            ViewData["input_date"] = date;
             if (date == "" || date == null)
             {
                 ViewData["date"] = "test";
@@ -137,7 +210,7 @@ namespace BezoekersDashboard.Controllers
         [Route("Visitors/input_month/{month}")]
         public async Task<IActionResult> GetMonth(string month)
         {
-
+            ViewData["input_month"] = month;
             if (month == "" || month == null)
             {
                 ViewData["month"] = "test";
@@ -168,7 +241,7 @@ namespace BezoekersDashboard.Controllers
         [Route("Visitors/input_year/{year}")]
         public async Task<IActionResult> GetYear(string year)
         {
-
+            ViewData["input_year"] = year;
             if (year == "" || year == null)
             {
                 ViewData["year"] = "test";
@@ -196,6 +269,8 @@ namespace BezoekersDashboard.Controllers
         public async Task<IActionResult> GetDateZip(string date, string zipcode)
         {
 
+            ViewData["input_zipcode"] = zipcode;
+            ViewData["input_date"] = date;
             if (date == "" || date == null || zipcode == "" || zipcode == null)
             {
                 ViewData["date"] = "test";
@@ -219,13 +294,15 @@ namespace BezoekersDashboard.Controllers
             {
                 return NotFound();
             }
-            return View("Visitors", realvisit.OrderBy(s => s.Date.Year));
+            return View("VisitZipFilter", realvisit.OrderBy(s => s.Date.Year));
         }
 
         [Route("Visitors/input_month/{month}/input_zip/{zipcode}")]
         public async Task<IActionResult> GetMonthZip(string month, string zipcode)
         {
 
+            ViewData["input_zipcode"] = zipcode;
+            ViewData["input_month"] = month;
             if (month == "" || month == null || zipcode == "" || zipcode == null)
             {
                 ViewData["month"] = "test";
@@ -253,13 +330,15 @@ namespace BezoekersDashboard.Controllers
             {
                 return NotFound();
             }
-            return View("Visitors", realvisit.OrderBy(s => s.Date.Year));
+            return View("VisitZipFilter", realvisit.OrderBy(s => s.Date.Year));
         }
 
         [Route("Visitors/input_year/{year}/input_zip/{zipcode}")]
         public async Task<IActionResult> GetYearZip(string year, string zipcode)
         {
 
+            ViewData["input_zipcode"] = zipcode;
+            ViewData["input_year"] = year;
             if (year == "" || year == null || zipcode == "" || zipcode == null)
             {
                 ViewData["year"] = "test";
@@ -283,7 +362,7 @@ namespace BezoekersDashboard.Controllers
             {
                 return NotFound();
             }
-            return View("Visitors", realvisit.OrderBy(s => s.Date.Year));
+            return View("VisitZipFilter", realvisit.OrderBy(s => s.Date.Year));
         }
 
         // POST: Visitors/Edit/5

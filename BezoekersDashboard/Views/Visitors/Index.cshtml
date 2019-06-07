@@ -14,23 +14,7 @@
 <script src="~/js/Chart.js"></script>
 <p>
     <div class="data_holder">
-        <div id="filter_holder">
-            <div id="filter_nav_holder">
-                <button id="btn_year" class="nav_btn" filter_id="input_year">Jaar</button>
-                <input type="text" id="input_year" class="nav_input" />
-                <button id="btn_month" class="nav_btn" filter_id="input_month">Maand</button>
-                <input type="text" id="input_month" class="nav_input" />
-                <button id="btn_day" class="nav_btn" filter_id="input_date">Dag</button>
-                <input type="date" id="input_date" class="nav_input" />
-                <button id="btn_zipcode" class="nav_toggle_btn" filter_id="input_zip">Postcode</button>
-                <input type="text" id="input_zip" />
-            </div>
-            <div id="filter_input_holder">
-            </div>
-            <div id="filter_submit_holder">
-                <button id="submit_filter">Search</button>
-            </div>
-        </div>
+        <partial name="_Navbar">
         <div class="chart_holder" width="400" height="200">
             <canvas id="visitorbarchart" class="chart"></canvas>
         </div>
@@ -50,74 +34,34 @@
                 </tr>
             </thead>
             <tbody>
-                @{ 
+                @{
                     var table_value_ar = new Dictionary<string, int>();
                     foreach (var item in Model)
                     {
                         if (!(table_value_ar.ContainsKey(item.Zipcode)))
                         {
                             table_value_ar.Add(item.Zipcode, item.Amount);
-                        }else
+                        }
+                        else
                         {
                             table_value_ar[item.Zipcode] += item.Amount;
                         }
                     }
-                } 
+                }
                 @foreach (var table_value in table_value_ar)
                 {
-                <tr>
-                    <td>
-                        @table_value.Value
-                    </td>
-                    <td>
-                        <a href="Visitors/GetZip/@table_value.Key">@table_value.Key</a>
-                    </td>
-                </tr>
+                    <tr>
+                        <td>
+                            @table_value.Value
+                        </td>
+                        <td>
+                            <a href="Visitors/GetZip/@table_value.Key">@table_value.Key</a>
+                        </td>
+                    </tr>
                 }
             </tbody>
         </table>
-    </div>
-    <script>
-        //interactive filter bar script for search
-        (function ($) {
-            $(document).ready(function () {
-                $('body').off('click', '.nav_btn').on('click', '.nav_btn', function () {
-                    $('.nav_btn').each(function () {
-                        $(this).removeClass('nav_active');
-                    })
-                    $(this).addClass('nav_active');
-                    var filter_id = $(this).attr('filter_id');
-                    $('.nav_input').each(function () {
-                        $(this).removeClass('nav_active')
-                    })
-                    $('#' + filter_id).addClass('nav_active');
-                })
-
-                //interaction for filtering on zipcodes
-                $('body').off('click', '.nav_toggle_btn').on('click', '.nav_toggle_btn', function () {
-
-                    var filter_id = $(this).attr('filter_id');
-                    if ($('#' + filter_id).hasClass('nav_active')) {
-                        $('#' + filter_id).removeClass('nav_active');
-                        $(this).removeClass('nav_active')
-                    } else {
-                        $('#' + filter_id).addClass('nav_active');
-                        $(this).addClass('nav_active')
-                    }
-                });
-
-                $('body').off('click', '#submit_filter').on('click', '#submit_filter', function () {
-                    var values = "";
-                    var value = "";
-                    $('input.nav_active').each(function () {
-                        value = $(this).val();
-                        values += "/"+$(this).attr('id')+"/"+value;
-                    });
-                    window.location.replace("/Visitors" + values);
-                });
-            });
-        }(jQuery));
-    </script>
+</div>
     <script>
         mapboxgl.accessToken = 'pk.eyJ1IjoiZDI1MjIxNSIsImEiOiJjanZud252d3QxbXMwNDNuemVzNGR1OXd4In0.buef45ACfL9QD2pc8nXWsA';
         var map = new mapboxgl.Map({
