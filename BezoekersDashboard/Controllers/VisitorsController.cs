@@ -124,7 +124,7 @@ namespace BezoekersDashboard.Controllers
                                 newvisit.Amount = rand.Next(10, 50);
                                 string datetimestring = year.ToString() + "-" + month.ToString() + "-" + day.ToString() + " " + time;
                                 newvisit.Date = DateTime.Parse(datetimestring);
-                                newvisit.Zipcode = "4724CW";
+                                newvisit.Zipcode = "4723CW";
                                 newvisit.Id = 0;
                                 _context.Add(newvisit);
                                 await _context.SaveChangesAsync();
@@ -204,7 +204,7 @@ namespace BezoekersDashboard.Controllers
             {
                 return NotFound();
             }
-            return View("Visitors", realvisit.OrderBy(s => s.Date.Year));
+            return View("VisitZipFilter", realvisit.OrderBy(s => s.Date.Year));
         }
 
         [Route("Visitors/input_month/{month}")]
@@ -235,7 +235,7 @@ namespace BezoekersDashboard.Controllers
             {
                 return NotFound();
             }
-            return View("Visitors", realvisit.OrderBy(s => s.Date.Year));
+            return View("VisitZipFilter", realvisit.OrderBy(s => s.Date.Year));
         }
 
         [Route("Visitors/input_year/{year}")]
@@ -262,7 +262,7 @@ namespace BezoekersDashboard.Controllers
             {
                 return NotFound();
             }
-            return View("Visitors", realvisit.OrderBy(s => s.Date.Year));
+            return View("VisitZipFilter", realvisit.OrderBy(s => s.Date.Year));
         }
 
         [Route("Visitors/input_date/{date}/input_zip/{zipcode}")]

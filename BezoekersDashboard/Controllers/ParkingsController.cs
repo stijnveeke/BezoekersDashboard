@@ -80,6 +80,21 @@ namespace BezoekersDashboard.Controllers
             return View(parking);
         }
 
+
+        [Route("Parking/Startdate/{startdate}/Enddate/{enddate}")]
+        public async Task<IActionResult> Search(DateTime startdate, DateTime enddate)
+        {
+            List<Parking> parking = await _context.Parking.ToListAsync();
+            List<Parking> parkfilter = new List<Parking>();
+            foreach (Parking park in parking)
+            {
+                if (park.Date < startdate && park.Date > enddate)
+                {
+                    parkfilter.Add(park);
+                }
+            }
+            return View("", parkfilter);
+        }
         // POST: Parkings/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
